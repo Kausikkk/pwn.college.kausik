@@ -357,7 +357,26 @@ hacker@dojo:~$
 
 ## Solution 
 
+1. I needed to provide a long path to a file in my home directory but what I typed can only contain 3 characters.
+2. I used ```~/a``` which is exactly 3 characters, the shell aautomatically converts this into full path ```/home/hacker/a```.
+3. Running this I got the flag
 
+```sh
+hacker@paths~home-sweet-home:~$ /challenge/run ~/a
+Writing the file to /home/hacker/a!
+```
+
+## Flag
+
+```
+pwn.college{UoNI-apm5tq5NF3QhgA8bZgeotY.QXzMDO0wCMzAzNzEzW}
+```
+
+### Notes
+
+1. What I understood is that ```~``` is a powerful shortcut.
+2. ```~``` replaces  ```/home/hacker```, which was the key to solving.
+3. Apart from this what I newly learned from this is that just typing ```cd``` acts like a home butter, Its like the fastest way to go to home directory ```~```.
 
 
 
