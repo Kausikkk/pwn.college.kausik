@@ -193,7 +193,174 @@ pwn.college{Ez7AX3GCOveDztF4K1cK-SDDy3k.QX4QTN0wCMzAzNzEzW}
 
 ### Notes
 
-1. At first, this challenge was confusing. After I connected to the terminal, I expected it to tell me which directory
-   to change my present directory into, but there was no message or instruction on the screen. I wasn't sure how to find the path I was suppose to go to.
-2. I decided to experiment by running the ```/challenge/run``` program to see what would happen. At this time the program gave me an incorrect message but
+1. At first, this challenge was confusing. After I connected to the terminal, I expected    it to tell me which directory to change my present directory into, but there was no      message or instruction on the screen. I wasn't sure how to find the path I was           suppose to go to.
+2. I decided to experiment by running the ```/challenge/run``` program to see what would    happen. At this time the program gave me an incorrect message but
    it also showed the right directory in which I need to cd .
+
+# Challenge 6 Implicit relative paths, from /
+
+Now you're familiar with the concept of referring to absolute paths and changing directories. If you put in absolute paths everywhere, then it really doesn't matter what directory you are in, as you likely found out in the previous three challenges.
+
+However, the current working directory does matter for relative paths.
+
+A relative path is any path that does not start at root (i.e., it does not start with /).
+A relative path is interpreted relative to your current working directory (cwd).
+Your ```cwd``` is the directory that your prompt is currently located at.
+This means how you specify a particular file, depends on where the terminal prompt is located.
+
+Imagine we want to access some file located at ```/tmp/a/b/my_file```.
+
+If my cwd is ```/```, then a relative path to the file is ```tmp/a/b/my_file```.
+If my cwd is ```/tmp```, then a relative path to the file is ```a/b/my_file```.
+If my cwd is ```/tmp/a/b/c```, then a relative path to the file is ../my_file. The .. refers to the parent directory.
+
+## Solution 
+
+1. I first ran the command cd / to move my shell to the root directory, satisfying the      first condition.
+2. I understood that the relative path to ```/challenge/run``` would be ```challenge/run```
+3. I then executed the ```challlenge/run``` which gave my flag.
+
+```sh
+hacker@paths~implicit-relative-paths-from-:~$ cd /
+hacker@paths~implicit-relative-paths-from-:/$ challenge/run
+Correct!!!
+challenge/run is a relative path, invoked from the right directory!
+```
+
+## Flag
+
+```
+pwn.college{geSS5_4S0wTyY-hoef9AAdvrlPW.QX5QTN0wCMzAzNzEzW}
+```
+
+### Notes 
+
+1. I learned that a path starting with / is a full location of a file.
+2. A path that doesnt start with / is just to tell the pc to look at something inside the folder we are currently in.
+
+# Challenge 7 explicit relative paths, from /
+
+Previously, your relative path was "naked": it directly specified the directory to descend into from the current directory. In this level, we're going to explore more explicit relative paths.
+
+In most operating systems, including Linux, every directory has two implicit entries that you can reference in paths: . and ... The first, ., refers right to the same directory, so the following absolute paths are all identical to each other:
+
+```sh
+/challenge
+/challenge/.
+/challenge/./././././././././
+/./././challenge/././
+```
+The following relative paths are also all identical to each other:
+```sh
+challenge
+./challenge
+./././challenge
+challenge/.
+```
+Of course, if your current working directory is /, the above relative paths are equivalent to the above absolute paths.
+
+## Solution 
+
+1. This challenge is designed to teach us how to use the ```.``` character.
+2. First my current directory needed to be the root so I used the ```cd /``` to move        there.
+3. To make it explicit relative path I reconstructed the command to ```./challenge/run```
+4. Executing this I got my flag.
+
+```sh
+hacker@paths~explicit-relative-paths-from-:~$ cd /
+hacker@paths~explicit-relative-paths-from-:/$ ./challenge/run
+Correct!!!
+./challenge/run is a relative path, invoked from the right directory!
+```
+
+## Flag
+
+```
+pwn.college{Mrb0J7eI2Px5B23cmyVVxT1hZeK.QXwUTN0wCMzAzNzEzW}
+```
+
+### Notes
+
+1.I learned that adding ```./``` to the start of the path is a way to be very specific.
+2.The ```challenge/run``` and ```./challenge/run``` do the same thing but the ```./```     is to be just more specific.
+
+# Challenge 8 Implicit Relative Path 
+
+In this level, we'll practice referring to paths using . a bit more. This challenge will need you to run it from the /challenge directory. Here, things get slightly tricky.
+
+Linux explicitly avoids automatically looking in the current directory when you provide a "naked" path. Consider the following:
+
+```sh
+hacker@dojo:~$ cd /challenge
+hacker@dojo:/challenge$ run
+```
+This will not invoke /challenge/run. This is actually a safety measure: if Linux searched the current directory for programs every time you entered a naked path, you could accidentally execute programs in your current directory that happened to have the same names as core system utilities! As a result, the above commands will yield the following error:
+```sh
+bash: run: command not found
+```
+
+## Solution 
+
+1. This challenge required me to execute the ```run``` program within the ```/challenge``` directory.
+2. First I navigated to the challenge directory using ```cd /challenge```.
+3. then I used ```./run``` to specifically run the ```run``` program.
+4. Executing this I got the flag.
+
+```sh
+hacker@paths~implicit-relative-path:~$ cd /challenge
+hacker@paths~implicit-relative-path:/challenge$ ./run
+Correct!!!
+./run is a relative path, invoked from the right directory!
+```
+
+## Flag 
+
+```
+pwn.college{ADLX-lQP_PE-deDw4Wr2-RkDYWh.QXxUTN0wCMzAzNzEzW}
+```
+
+### Notes
+
+1. What I learnt is that the computer doesnt automatically look for programs in the folder we are currently in.
+2. Just typing run will fail even if the run file is right there.
+3. We must type ```./``` before it's name.
+
+# Challenge 9 Home sweet home 
+
+Every user has a home directory, typically under /home in the filesystem. In the dojo, you are the hacker user, and your home directory is /home/hacker. The home directory is typically where users store most of their personal files. As you make your way through pwn.college, this is where you'll store most of your solutions.
+
+Typically, your shell session will start with your home directory as your current working directory. Consider the initial prompt:
+
+```sh
+hacker@dojo:~$
+```
+The ~ in this prompt is the current working directory, with ~ being shorthand for /home/hacker. Bash provides and uses this shorthand because, again, most of your time will be spent in your home directory. Thus, whenever bash sees ~ provided as the start of an argument in a way consistent with a path, it will expand it to your home directory. Consider:
+```sh
+hacker@dojo:~$ echo LOOK: ~
+LOOK: /home/hacker
+hacker@dojo:~$ cd /
+hacker@dojo:/$ cd ~
+hacker@dojo:~$ cd ~/asdf
+hacker@dojo:~/asdf$ cd ~/asdf
+hacker@dojo:~/asdf$ cd ~
+hacker@dojo:~$ cd /home/hacker/asdf
+hacker@dojo:~/asdf$
+```
+Note that the expansion of ~ is an absolute path, and only the leading ~ is expanded. This means, for example, that ~/~ will be expanded to /home/hacker/~ rather than /home/hacker/home/hacker.
+
+Fun fact: cd will use your home directory as the default destination:
+```sh
+hacker@dojo:~$ cd /tmp
+hacker@dojo:/tmp$ cd
+hacker@dojo:~$
+```
+
+## Solution 
+
+
+
+
+
+
+   
+
