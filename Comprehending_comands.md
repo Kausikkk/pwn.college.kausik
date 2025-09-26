@@ -423,10 +423,234 @@ bin   challenge  etc   home  lib32  libx32  mnt  proc  run   srv  tmp  var
 boot  dev        flag  lib   lib64  media   opt  root  sbin  sys  usr
 That's a lot of contents! One day, you will be quite familiar with them, but already, you might recognize the flag file and the challenge directory.
 
+## Solution 
+1.This challenge was a long, multi-step treasure hunt across the filesystem. The goal was to follow a trail of clues by repeating a simple pattern of commands using `ls` to LOOK for a clue file, `cat` to READ the clue inside it, and `cd` to GO to the next location.
+2.The quest involved several tricks, including "trapped" directories that I couldn't cd into, and files that were just distractions. By carefully investigating files with `ls -l` and identifying the most likely clue files, I navigated through many different directories.
+3.The final few steps of my journey are logged below. After following a clue from a HINT file, I navigated to the `/usr/local/lib/python3.8/dist-packages/pytz/zoneinfo/Arctic `directory. There, I used ls to find one last clue file named DOSSIER, and reading it with cat revealed the final flag.
 
+```sh
+hacker@commands~an-epic-filesystem-quest:~$ cd /
+hacker@commands~an-epic-filesystem-quest:/$ ls
+MEMO  boot       dev  flag  lib    lib64   media  nix  proc  run   srv  tmp  var
+bin   challenge  etc  home  lib32  libx32  mnt    opt  root  sbin  sys  usr
+hacker@commands~an-epic-filesystem-quest:/$ cat MEMO
+Great sleuthing!
+The next clue is in: /opt/linux/linux-5.4/tools/power/cpupower/utils/idle_monitor
+hacker@commands~an-epic-filesystem-quest:/$ cd /opt/linux/linux-5.4/tools/power/cpupower/utils/idle_monitor
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/power/cpupower/utils/idle_monitor$ ls
+INSIGHT            cpupower-monitor.c  idle_monitors.def  nhm_idle.c
+amd_fam14h_idle.c  cpupower-monitor.h  idle_monitors.h    snb_idle.c
+cpuidle_sysfs.c    hsw_ext_idle.c      mperf_monitor.c
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/power/cpupower/utils/idle_monitor$ cat INSIGHT
+Yahaha, you found me!
+The next clue is in: /usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode
 
+The next clue is **delayed** --- it will not become readable until you enter the directory with 'cd'.
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/power/cpupower/utils/idle_monitor$ cd /usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode
+hacker@commands~an-epic-filesystem-quest:/usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode$ ls
+MESSAGE  Regular
+hacker@commands~an-epic-filesystem-quest:/usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode$ cat MESSAGE
+Congratulations, you found the clue!
+The next clue is in: /usr/local/lib/python3.8/dist-packages/pyformlang/fcfg/tests/__pycache__
 
+Watch out! The next clue is **trapped**. You'll need to read it out without 'cd'ing into the directory; otherwise, the clue will self destruct!
+hacker@commands~an-epic-filesystem-quest:/usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode$ ls /usr/local/lib/python3.8/dist-packages/pyformlang/fcfg/tests/__pycache__
+SPOILER-TRAPPED          test_fcfg.cpython-38.pyc
+__init__.cpython-38.pyc  test_feature_structure.cpython-38.pyc
+hacker@commands~an-epic-filesystem-quest:/usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode$ cat /usr/local/lib/python3.8/dist-packages/pyformlang/fcfg/tests/__pycache__/SPOILER-TRAPPED
+Tubular find!
+The next clue is in: /usr/share/emacs/26.3/etc
 
+The next clue is **delayed** --- it will not become readable until you enter the directory with 'cd'.
+hacker@commands~an-epic-filesystem-quest:/usr/share/javascript/mathjax/unpacked/jax/output/SVG/fonts/Latin-Modern/NonUnicode$ cd /usr/share/emacs/26.3/etc
+hacker@commands~an-epic-filesystem-quest:/usr/share/emacs/26.3/etc$ ls
+AUTHORS       GNU         NEWS.20    TERMS              enriched.txt         publicsuffix.txt.gz
+CALC-NEWS     GNUS-NEWS   NEWS.21    THE-GNU-PROJECT    forms                refcards
+CENSORSHIP    HELLO       NEWS.22    TODO               future-bug           rgb.txt
+COPYING       HISTORY     NEWS.23    WHY-FREE           gnus                 schema
+CUE           LINUX-GNU   NEWS.24    charsets           gnus-tut.txt         ses-example.ses
+DEBUG         MACHINES    NEWS.25    compilation.txt    grep.txt             spook.lines
+DISTRIB       MH-E-NEWS   NEXTSTEP   e                  images               srecode
+DOC           MORE.STUFF  NXML-NEWS  edt-user.el        nxml                 themes
+ERC-NEWS      NEWS        ORDERS     emacs-buffer.gdb   org                  tutorials
+ETAGS.EBNF    NEWS.1-17   ORG-NEWS   emacs.appdata.xml  package-keyring.gpg  yow.lines
+ETAGS.README  NEWS.18     PROBLEMS   emacs.icon         ps-prin0.ps
+FTP           NEWS.19     README     emacs.service      ps-prin1.ps
+hacker@commands~an-epic-filesystem-quest:/usr/share/emacs/26.3/etc$ ls -l
+total 5472
+-rw-r--r--  1 root   root    172098 Sep 10  2019 AUTHORS
+-rw-r--r--  1 root   root     36762 Sep 10  2019 CALC-NEWS
+-rw-r--r--  1 root   root       191 Sep 10  2019 CENSORSHIP
+lrwxrwxrwx  1 root   root        30 Mar 25  2020 COPYING -> ../../../common-licenses/GPL-3
+-rw-r--r--  1 hacker hacker     252 Sep 26 17:16 CUE
+-rw-r--r--  1 root   root     42198 Sep 10  2019 DEBUG
+-rw-r--r--  1 root   root      4615 Sep 10  2019 DISTRIB
+-rw-r--r--  1 root   root   2896198 Mar 25  2020 DOC
+-rw-r--r--  1 root   root     45170 Sep 10  2019 ERC-NEWS
+-rw-r--r--  1 root   root      4139 Sep 10  2019 ETAGS.EBNF
+-rw-r--r--  1 root   root      2284 Sep 10  2019 ETAGS.README
+-rw-r--r--  1 root   root       312 Sep 10  2019 FTP
+-rw-r--r--  1 root   root       172 Sep 10  2019 GNU
+-rw-r--r--  1 root   root     12397 Sep 10  2019 GNUS-NEWS
+-rw-r--r--  1 root   root      5099 Sep 10  2019 HELLO
+-rw-r--r--  1 root   root      5672 Sep 10  2019 HISTORY
+-rw-r--r--  1 root   root       185 Sep 10  2019 LINUX-GNU
+-rw-r--r--  1 root   root      4731 Sep 10  2019 MACHINES
+-rw-r--r--  1 root   root    114771 Sep 10  2019 MH-E-NEWS
+-rw-r--r--  1 root   root       208 Sep 10  2019 MORE.STUFF
+-rw-r--r--  1 root   root     81564 Mar 25  2020 NEWS
+-rw-r--r--  1 root   root     98512 Sep 10  2019 NEWS.1-17
+-rw-r--r--  1 root   root     63562 Sep 10  2019 NEWS.18
+-rw-r--r--  1 root   root    272638 Sep 10  2019 NEWS.19
+-rw-r--r--  1 root   root    188216 Sep 10  2019 NEWS.20
+-rw-r--r--  1 root   root    191809 Sep 10  2019 NEWS.21
+-rw-r--r--  1 root   root    238292 Sep 10  2019 NEWS.22
+-rw-r--r--  1 root   root    102677 Sep 10  2019 NEWS.23
+-rw-r--r--  1 root   root    154252 Sep 10  2019 NEWS.24
+-rw-r--r--  1 root   root     77261 Sep 10  2019 NEWS.25
+-rw-r--r--  1 root   root     12135 Sep 10  2019 NEXTSTEP
+-rw-r--r--  1 root   root      7376 Sep 10  2019 NXML-NEWS
+-rw-r--r--  1 root   root       187 Sep 10  2019 ORDERS
+-rw-r--r--  1 root   root    162315 Sep 10  2019 ORG-NEWS
+-rw-r--r--  1 root   root    138785 Sep 10  2019 PROBLEMS
+-rw-r--r--  1 root   root       479 Sep 10  2019 README
+-rw-r--r--  1 root   root     10055 Sep 10  2019 TERMS
+-rw-r--r--  1 root   root       176 Sep 10  2019 THE-GNU-PROJECT
+-rw-r--r--  1 root   root     59791 Sep 10  2019 TODO
+-rw-r--r--  1 root   root       198 Sep 10  2019 WHY-FREE
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 charsets
+-rw-r--r--  1 root   root     19580 Sep 10  2019 compilation.txt
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 e
+-rw-r--r--  1 root   root      7015 Sep 10  2019 edt-user.el
+-rw-r--r--  1 root   root      8718 Sep 10  2019 emacs-buffer.gdb
+-rw-r--r--  1 root   root      1510 Sep 10  2019 emacs.appdata.xml
+-rw-r--r--  1 root   root      1933 Sep 10  2019 emacs.icon
+-rw-r--r--  1 root   root       560 Sep 10  2019 emacs.service
+-rw-r--r--  1 root   root     10626 Sep 10  2019 enriched.txt
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 forms
+-rw-r--r--  1 root   root      1574 Sep 10  2019 future-bug
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 gnus
+-rw-r--r--  1 root   root     10596 Sep 10  2019 gnus-tut.txt
+-rw-r--r--  1 root   root      4701 Sep 10  2019 grep.txt
+drwxr-xr-x 13 root   root      4096 Sep  7 01:22 images
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 nxml
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 org
+-rw-r--r--  1 root   root      2069 Sep 10  2019 package-keyring.gpg
+-rw-r--r--  1 root   root      5326 Sep 10  2019 ps-prin0.ps
+-rw-r--r--  1 root   root     23235 Sep 10  2019 ps-prin1.ps
+-rw-r--r--  1 root   root     58744 Mar 25  2020 publicsuffix.txt.gz
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 refcards
+-rw-r--r--  1 root   root     19044 Sep 10  2019 rgb.txt
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 schema
+-rw-r--r--  1 root   root      8629 Sep 10  2019 ses-example.ses
+-rw-r--r--  1 root   root     12777 Sep 10  2019 spook.lines
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 srecode
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 themes
+drwxr-xr-x  2 root   root      4096 Sep  7 01:22 tutorials
+-rw-r--r--  1 root   root       400 Sep 10  2019 yow.lines
+hacker@commands~an-epic-filesystem-quest:/usr/share/emacs/26.3/etc$ cat CUE
+Yahaha, you found me!
+The next clue is in: /usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled
+
+The next clue is **hidden** --- its filename starts with a '.' character. You'll need to look for it using special options to 'ls'.
+hacker@commands~an-epic-filesystem-quest:/usr/share/emacs/26.3/etc$ cd /usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled$ ls -a
+.                 colors_rkt.dep              syncheck-intf_rkt.zo                 xref_rkt.dep
+..                colors_rkt.zo               syncheck-local-member-names_rkt.dep  xref_rkt.zo
+.SNIPPET          contract-traversal_rkt.dep  syncheck-local-member-names_rkt.zo
+annotate_rkt.dep  contract-traversal_rkt.zo   traversals_rkt.dep
+annotate_rkt.zo   syncheck-intf_rkt.dep       traversals_rkt.zo
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled$ cat .SNIPPET
+Tubular find!
+The next clue is in: /usr/lib/R/library/stats4/Meta
+
+Watch out! The next clue is **trapped**. You'll need to read it out without 'cd'ing into the directory; otherwise, the clue will self destruct!
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled$ cat /usr/lib/R/library/stats4/Meta
+cat: /usr/lib/R/library/stats4/Meta: Is a directory
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled$ ls /usr/lib/R/library/stats4/Meta
+INFO-TRAPPED  Rd.rds  features.rds  hsearch.rds  links.rds  nsInfo.rds  package.rds
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled$ cat /usr/lib/R/library/stats4/Meta/INFO-TRAPPED
+Lucky listing!
+The next clue is in: /opt/linux/linux-5.4/tools/testing/selftests/powerpc/primitives/linux
+hacker@commands~an-epic-filesystem-quest:/usr/share/racket/pkgs/drracket-tool-lib/drracket/private/syncheck/compiled$ cd /opt/linux/linux-5.4/tools/testing/selftests/powerpc/primitives/linux
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/testing/selftests/powerpc/primitives/linux$ ls
+HINT  stringify.h
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/testing/selftests/powerpc/primitives/linux$ cat stringify.h
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/testing/selftests/powerpc/primitives/linux$ cat HINT
+Tubular find!
+The next clue is in: /usr/local/lib/python3.8/dist-packages/pytz/zoneinfo/Arctic
+hacker@commands~an-epic-filesystem-quest:/opt/linux/linux-5.4/tools/testing/selftests/powerpc/primitives/linux$ cd /usr/local/lib/python3.8/dist-packages/pytz/zoneinfo/Arctic
+hacker@commands~an-epic-filesystem-quest:/usr/local/lib/python3.8/dist-packages/pytz/zoneinfo/Arctic$ ls
+DOSSIER  Longyearbyen
+hacker@commands~an-epic-filesystem-quest:/usr/local/lib/python3.8/dist-packages/pytz/zoneinfo/Arctic$ cat DOSSIER
+CONGRATULATIONS! Your perserverence has paid off, and you have found the flag!
+It is: pwn.college{YxFkh4MttFpKK5xBcPwtBrK8k0H.QX5IDO0wCMzAzNzEzW}
+hacker@commands~an-epic-filesystem-quest:/usr/local/lib/python3.8/dist-packages/pytz/zoneinfo/Arctic$
+```
+
+## Flag
+
+```
+pwn.college{YxFkh4MttFpKK5xBcPwtBrK8k0H.QX5IDO0wCMzAzNzEzW}
+```
+
+### References
+
+`youtube`
+
+### Notes 
+
+1. I learnt how to use the ls, cat, cd commands a lot perfect.
+2. This challenge taught me not just to look at filenames but to even use `ls -l` to get more details.
+3. The quest used several tricks like the trapped directory where i couldnt use cd.
+4. This challenge took me a lot of time probably more than an hour 20 minutes to get till the end and claim the flag.
+5. I really learned a lot from this challenge.
+
+# Challenge 12 making directories 
+
+We can create files. How about directories? You make directories using the mkdir command. Then you can stick files in there!
+
+Watch:
+```sh
+hacker@dojo:~$ cd /tmp
+hacker@dojo:/tmp$ ls
+hacker@dojo:/tmp$ ls
+hacker@dojo:/tmp$ mkdir my_directory
+hacker@dojo:/tmp$ ls
+my_directory
+hacker@dojo:/tmp$ cd my_directory
+hacker@dojo:/tmp/my_directory$ touch my_file
+hacker@dojo:/tmp/my_directory$ ls
+my_file
+hacker@dojo:/tmp/my_directory$ ls /tmp/my_directory/my_file
+/tmp/my_directory/my_file
+hacker@dojo:/tmp/my_directory$
+```
+
+## Solution
+
+1.This challenge introduced the `mkdir` command for making new directories and required me to use it along with the `touch` command.
+2. First, I needed to create a new directory at `/tmp/pwn`. Second, I had to create a new, empty file named college inside that new directory. Finally, I had to run the /challenge/run program to check my work.
+3. I followed the instructions in order. I used `mkdir /tmp/pwn` to create the directory, then touch `/tmp/pwn/college` to create the file inside it. The last step was to run `/challenge/run`, which confirmed the structure was correct and gave me the flag.
+
+```sh
+hacker@commands~making-directories:~$ mkdir /tmp/pwn
+hacker@commands~making-directories:~$ touch /tmp/pwn/college
+hacker@commands~making-directories:~$ /challenge/run
+```
+
+## Flag
+
+```
+pwn.college{wxLbGxG5el4f0Rw9_4_zBoGIfA6.QXxMDO0wCMzAzNzEzW}
+```
+
+### Notes 
+1.I learned the `mkdir` command which is the standard tool for creating new, empty folders.
+2. we use `mkdir` to build the folder structure first and then we place files inside those folders.
+3. This challenge was good practice for creating things using full absolute paths.
+
+# challenge 14 
 
 
 
