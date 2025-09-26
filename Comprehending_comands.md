@@ -347,7 +347,81 @@ hacker@dojo:~$
 
 ## Solution 
 
-1. 
+1. This challenge introduced the `mv` command used for moving or renaming files.
+2. This has two steps first is to move the `/flag` file to a new directory.
+3. second step is to run and check the program.
+4. I followed the instructions using the correct format and ran `mv /flag /tmp/hack-the-planet` to move the file to its new location.
+5. After this I ran the `/challenge/check` which confirmed the file was moved successfully and then this gave me the flag.
+
+```sh
+hacker@commands~moving-files:~$ mv /flag /tmp/hack-the-planet
+Correct! Performing 'mv /flag /tmp/hack-the-planet'.
+hacker@commands~moving-files:~$ /challenge/check
+Congrats! You successfully moved the flag to /tmp/hack-the-planet! Here it is:
+```
+
+## Flag 
+
+```
+pwn.college{0BfHPQlb-XSmGQXAre07tX0q_im.0VOxEzNxwCMzAzNzEzW}
+```
+
+### Notes
+
+1. I learned how the `mv` command works. By this I understood how to move files from one location to another using the simple format.
+2. I also learned that `mv` is used to rename files from googling it.
+
+# Challenge 10 hidden files
+
+Interestingly, ls doesn't list all the files by default. Linux has a convention where files that start with a . don't show up by default in ls and in a few other contexts. To view them with ls, you need to invoke ls with the -a flag, as so:
+
+```sh
+hacker@dojo:~$ touch pwn
+hacker@dojo:~$ touch .college
+hacker@dojo:~$ ls
+pwn
+hacker@dojo:~$ ls -a
+.college	pwn
+hacker@dojo:~$
+```
+
+## Solution 
+
+1. This challenge introduced hidden files in Linux—files whose names begin with a dot, The goal was to find and read a hidden flag file located in the root directory.
+2. I know a normal `ls` wouldn't work, so I used the `ls -a` command to list all files in the root directory.
+3. This revealed the hidden flag file name which was `.flag-1147927078874`.
+
+```sh
+hacker@commands~hidden-files:~$ ls -a /
+.   .dockerenv           bin   challenge  etc   lib    lib64   media  nix  proc  run   srv  tmp  var
+..  .flag-1147927078874  boot  dev        home  lib32  libx32  mnt    opt  root  sbin  sys  usr
+hacker@commands~hidden-files:~$ cat /.flag-1147927078874
+```
+
+## Flag
+
+```
+pwn.college{UaGzBCWutPQSm_p5wpRVYrhnfuR.QXwUDO0wCMzAzNzEzW}
+```
+
+### Notes
+
+1.The main lesson was learning about hidden files. I now know that any file starting with a dot (.) is hidden by default, and we must use the ls -a command to see it.
+2.I learned that files are often hidden to protect important configuration files.
+
+# Challenge 11 An epic filesystem quest
+
+With your knowledge of cd, ls, and cat, we're ready to play a little game!
+
+We'll start it out in /. Normally:
+
+```sh
+hacker@dojo:~$ cd /
+hacker@dojo:/$ ls
+```
+bin   challenge  etc   home  lib32  libx32  mnt  proc  run   srv  tmp  var
+boot  dev        flag  lib   lib64  media   opt  root  sbin  sys  usr
+That's a lot of contents! One day, you will be quite familiar with them, but already, you might recognize the flag file and the challenge directory.
 
 
 
