@@ -168,17 +168,153 @@ You can scroll man pages with the arrow keys (and PgUp/PgDn) and search with /. 
 
 ## Solution 
 
+1. First as the challenge said I entered the man challenge manual by press `man challenge` command.
+2. this took some time to search.
+3. I used the `/flag` to search for the words faster and pressed n to go to the next sentence which has the word flag.
+4. At last while scrolling using up and down arrows I found the flag command `--wmvvp` command.
+5. Finally I executed the command and retrived the flag.
 
+```sh
+hacker@man~searching-manuals:~$ man challenge
+hacker@man~searching-manuals:~$ /challenge/challenge --wmvvp
+Initializing...
+Correct usage! Your flag: pwn.college{Y2Iaq1WpGI4sNz5QFrsbTMhgAwV.QX1EDO0wCMzAzNzEzW}
+```
 
 ## Flag
 
 ```
-
+pwn.college{Y2Iaq1WpGI4sNz5QFrsbTMhgAwV.QX1EDO0wCMzAzNzEzW}
 ```
 
+### Notes 
 
+1. At first I didnt understand were to find the flag.
+2. On opening the manual and spending some time searching I found the command.
+3. This showed me that we need to have a bit of patience.
 
+# Challenge 5 Searching for manuals 
 
+This level is tricky: it hides the manpage for the challenge by randomizing its name. Luckily, all of the manpages are gathered in a searchable database, so you'll be able to search the man page database to find the hidden challenge man page! To figure out how to search for the right manpage, read the man page manpage by doing: man man!
 
+## Solution 
 
+1. This puzzle's instruction manual had a hidden, random name.
+2. First, I ran man man to learn how to search for manuals and found the -k option.
+3. Next, I used man -k challenge to find the hidden manual's real name, which was elmtkdpmvn.
+4. Then, I read the hidden manual with man elmtkdpmvn and discovered the secret option was --elmtkd 098.
+5. Finally, I used that secret option with the program to get the flag.
+
+```sh
+hacker@man~searching-for-manuals:~$ man man
+hacker@man~searching-for-manuals:~$ man -k challenge
+elmtkdpmvn (1)       - print the flag!
+hacker@man~searching-for-manuals:~$ man elmtkdpmvn
+hacker@man~searching-for-manuals:~$ /challenge/challenge --elmtkd 098
+Correct usage! Your flag: pwn.college{QelmU0BF9tM80QQkdBpm0vnCk-f.QX2EDO0wCMzAzNzEzW}
+```
+
+## Flag 
+
+```
+pwn.college{QelmU0BF9tM80QQkdBpm0vnCk-f.QX2EDO0wCMzAzNzEzW}
+```
+
+### Notes 
+
+1.trick I learned is that you can read the manual for the man command itself by typing man man.
+2.The most important new tool from this lesson was man -k, which lets you search for a manual page by a keyword.
+
+# Challenge 6 Helpful Programs 
+
+Some programs don't have a man page, but might tell you how to run them if invoked with a special argument. Usually, this argument is --help, but it can often be -h or, in rare cases, -?, help, or other esoteric values like /? (though that latter is more frequently encountered on Windows).
+
+## Solution
+
+1.This puzzle required finding the right arguments to get the flag.
+2.I first ran /challenge/challenge --help to read the program's instructions.
+3.The help message showed a -p option to get a "secret value," and a -g option that needed that value to give the flag.
+3.So, I first ran the program with -p to get the secret value, which was 474.
+4.Then, I ran the program again with -g 474 to get the flag.
+
+```sh
+hacker@man~helpful-programs:~$ /challenge/challenge --help
+usage: a challenge to make you ask for help [-h] [--fortune] [-v] [-g GIVE_THE_FLAG] [-p]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --fortune             read your fortune
+  -v, --version         get the version number
+  -g GIVE_THE_FLAG, --give-the-flag GIVE_THE_FLAG
+                        get the flag, if given the correct value
+  -p, --print-value     print the value that will cause the -g option to give you the flag
+hacker@man~helpful-programs:~$ /challenge/challenge -p
+The secret value is: 474
+hacker@man~helpful-programs:~$ /challenge/challenge -g 474
+Correct usage! Your flag: pwn.college{4wDHrjrx7VekqnvgE4RtmyTv3iw.QX3IDO0wCMzAzNzEzW}
+```
+
+## Flag 
+
+```
+pwn.college{4wDHrjrx7VekqnvgE4RtmyTv3iw.QX3IDO0wCMzAzNzEzW}
+```
+
+### Notes 
+
+1. The main lesson was that many programs have a built-in instruction manual that you can see by using the --help argument.
+2.I learned to read the help text carefully, as the solution was a two-step puzzle hidden in the list of options.
+
+# Challenge 7 Help for builtins 
+
+Some commands, rather than being programs with man pages and help options, are built into the shell itself. These are called builtins. Builtins are invoked just like commands, but the shell handles them internally instead of launching other programs. You can get a list of shell builtins by running the builtin help, as so:
+```
+hacker@dojo:~$ help
+```
+You can get help on a specific one by passing it to the help builtin. Let's look at a builtin that we've already used earlier, cd!
+```sh
+hacker@dojo:~$ help cd
+cd: cd [-L|[-P [-e]] [-@]] [dir]
+    Change the shell working directory.
+    
+    Change the current directory to DIR.  The default DIR is the value of the
+    HOME shell variable.
+...
+```
+
+## Solution 
+
+1.This challenge taught me to use the help command to get instructions for shell "builtin" commands.
+2.I ran 'help challenge' to see how this level's command worked.
+3.The help text showed that I needed to use the --secret option.
+4.The instructions also gave me the secret value to use, which was `Y4n0Z0KB`.
+5.I ran the command with the correct option and value to get the flag.
+
+```sh
+hacker@man~help-for-builtins:~$ help challenge
+challenge: challenge [--fortune] [--version] [--secret SECRET]
+    This builtin command will read you the flag, given the right arguments!
+    
+    Options:
+      --fortune		display a fortune
+      --version		display the version
+      --secret VALUE	prints the flag, if VALUE is correct
+
+    You must be sure to provide the right value to --secret. That value
+    is "Y4nOZ0KB".
+hacker@man~help-for-builtins:~$ challenge --secret Y4nOZ0KB
+Correct! Here is your flag!
+```
+
+## Flag 
+
+```
+pwn.college{Y4nOZ0KBXaZEEBq2XyBM-PBLIk9.QX0ETO0wCMzAzNzEzW}
+```
+
+### Notes 
+
+1.I learned that some commands like cd are not separate programs, but are "builtins" that are a part of the shell itself.
+2.The help command is the special instruction manual used specifically for these builtin commands.
+3.This lesson completed my knowledge of how to get help: man for normal programs, --help for programs without a manual, and help for builtins.
 
